@@ -1,12 +1,12 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { NextApiRequest, NextApiResponse } from 'next';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore/lite';
+import { db } from 'lib/firebaseConnection';
 import { ITodo } from 'lib/interfaces';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore/lite';
-import { db } from 'lib/firebase';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse<ITodo[] | Error>) => {
   try {
-    const todosRef = query(collection(db, 'todos'), orderBy('createdAt'));
+    const todosRef = query(collection(db, 'todos'), orderBy('createdAt', 'desc'));
     const todosSnapshot = await getDocs(todosRef);
     const todosList: ITodo[] = todosSnapshot.docs.map((doc) => ({
       id: doc.id,

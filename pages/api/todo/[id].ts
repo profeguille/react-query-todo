@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { NextApiRequest, NextApiResponse } from 'next';
+import { doc, getDoc } from 'firebase/firestore/lite';
+import { db } from 'lib/firebaseConnection';
 import { ITodo } from 'lib/interfaces';
-import { getDoc, doc } from 'firebase/firestore/lite';
-import { db } from 'lib/firebase';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse<ITodo | Error>) => {
   const {
@@ -10,8 +10,6 @@ export default async (req: NextApiRequest, res: NextApiResponse<ITodo | Error>) 
   } = req;
 
   if (typeof id === 'string') {
-    console.log(`getting todo by id: ${id}`);
-
     try {
       const todoRef = doc(db, 'todos', id);
       const todoSnapshot = await getDoc(todoRef);

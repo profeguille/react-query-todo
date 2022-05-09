@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { NextApiRequest, NextApiResponse } from 'next';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore/lite';
+import { db } from 'lib/firebaseConnection';
 import { ITodo } from 'lib/interfaces';
-import { addDoc, serverTimestamp, collection, get } from 'firebase/firestore/lite';
-import { db } from 'lib/firebase';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse<ITodo | Error>) => {
   const { title } = req.body;
@@ -20,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ITodo | Error>) 
       return res.status(500).json(new Error('Error while trying to add new todo: ' + title));
     }
   } else {
-    console.log('Error: id is empty or not of correct type');
+    console.log('Error: title is empty or not of correct type');
     return res.status(500).json(new Error('Error: id is not of correct type or empty.'));
   }
 };
